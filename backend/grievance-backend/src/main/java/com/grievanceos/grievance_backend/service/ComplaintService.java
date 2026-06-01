@@ -79,6 +79,8 @@ public class ComplaintService {
                 .priority(savedComplaint.getPriority())
                 .createdAt(savedComplaint.getCreatedAt())
                 .wardId(ward != null ? ward.getId() : null)
+                .latitude(savedComplaint.getLocation() != null ? savedComplaint.getLocation().getY() : null)
+                .longitude(savedComplaint.getLocation() != null ? savedComplaint.getLocation().getX() : null)
                 .build();
     }
 
@@ -92,6 +94,8 @@ public class ComplaintService {
                         .status(c.getStatus())
                         .priority(c.getPriority())
                         .createdAt(c.getCreatedAt())
+                        .latitude(c.getLocation() != null ? c.getLocation().getY() : null)
+                        .longitude(c.getLocation() != null ? c.getLocation().getX() : null)
                         .build()
                 )
                 .toList();
@@ -111,6 +115,8 @@ public class ComplaintService {
                 .status(complaint.getStatus())
                 .priority(complaint.getPriority())
                 .createdAt(complaint.getCreatedAt())
+                .latitude(complaint.getLocation() != null ? complaint.getLocation().getY() : null)
+                .longitude(complaint.getLocation() != null ? complaint.getLocation().getX() : null)
                 .build();
     }
 
@@ -143,6 +149,8 @@ public class ComplaintService {
                 .status(savedComplaint.getStatus())
                 .priority(savedComplaint.getPriority())
                 .createdAt(savedComplaint.getCreatedAt())
+                .latitude(savedComplaint.getLocation() != null ? savedComplaint.getLocation().getY() : null)
+                .longitude(savedComplaint.getLocation() != null ? savedComplaint.getLocation().getX() : null)
                 .build();
     }
 
@@ -156,8 +164,8 @@ public class ComplaintService {
                         .title(c.getTitle())
                         .category(c.getCategory())
                         .status(c.getStatus())
-                        .latitude(c.getLocation().getY())
-                        .longitude(c.getLocation().getX())
+                        .latitude(c.getLocation() != null ? c.getLocation().getY() : null)
+                        .longitude(c.getLocation() != null ? c.getLocation().getX() : null)
                         .build())
                 .toList();
     }

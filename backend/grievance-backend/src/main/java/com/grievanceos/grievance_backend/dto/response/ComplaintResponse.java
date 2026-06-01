@@ -22,5 +22,8 @@ public class ComplaintResponse {
     private ZonedDateTime createdAt;
     private UUID wardId;
 
+    private Double latitude;
+    private Double longitude;
+
 
 }

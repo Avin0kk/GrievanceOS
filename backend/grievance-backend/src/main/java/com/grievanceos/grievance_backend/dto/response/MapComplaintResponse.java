@@ -3,6 +3,7 @@ package com.grievanceos.grievance_backend.dto.response;
 
 import com.grievanceos.grievance_backend.enums.ComplaintCategory;
 import com.grievanceos.grievance_backend.enums.ComplaintStatus;
+import com.grievanceos.grievance_backend.enums.Priority;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,4 +22,6 @@ public class MapComplaintResponse {
 
     private double latitude;
     private double longitude;
+    private String addressText;
+    private Priority priority;
 }
