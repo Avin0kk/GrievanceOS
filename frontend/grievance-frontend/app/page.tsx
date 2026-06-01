@@ -1,65 +1,193 @@
-import Image from "next/image";
+import { MessageSquareWarning, ArrowRight, PlayCircle, CheckCircle2, FileText, Route, Activity, BarChart3, ShieldCheck, Bell } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Separator } from '@/components/ui/separator';
+import Link from 'next/link';
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="bg-white text-neutral-950 min-h-screen">
+      {/* Navbar */}
+      <header className="border-b border-neutral-200 w-full">
+        <div className="flex px-12 py-4 justify-between items-center">
+          <div className="flex items-center gap-2">
+            <div className="size-9 rounded-xl bg-neutral-900 text-white flex justify-center items-center">
+              <MessageSquareWarning className="size-5" />
+            </div>
+            <span className="font-bold text-lg">GrievanceOS</span>
+          </div>
+          <nav className="flex items-center gap-8">
+            <a href="#features" className="text-sm text-neutral-500 hover:text-neutral-900">Features</a>
+            <a href="#how" className="text-sm text-neutral-500 hover:text-neutral-900">How It Works</a>
+            <a href="#map" className="text-sm text-neutral-500 hover:text-neutral-900">Live Map</a>
+          </nav>
+          <div className="flex items-center gap-2">
+            <Link href="/login">
+              <Button variant="ghost" className="text-sm">Sign in</Button>
+            </Link>
+            <Link href="/register">
+              <Button className="bg-neutral-900 text-white text-sm">Get Started</Button>
+            </Link>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+      </header>
+
+      <main className="p-12">
+        {/* Hero */}
+        <section className="flex items-center gap-12 mb-16">
+          <div className="flex flex-col flex-1 gap-6">
+            <Badge variant="secondary" className="rounded-full px-3 py-1 w-fit">
+              🏛️ Civic Tech for India
+            </Badge>
+            <h1 className="font-bold text-5xl tracking-tight leading-tight">
+              Report civic issues,<br />
+              <span className="text-neutral-500">get them resolved.</span>
+            </h1>
+            <p className="max-w-xl text-neutral-500 text-lg">
+              GrievanceOS lets citizens file geo-tagged complaints about potholes, power cuts, garbage and more. Officials respond. SLA timers ensure accountability.
+            </p>
+            <div className="flex items-center gap-4">
+              <Link href="/register">
+                <Button className="bg-neutral-900 text-white px-6 gap-2">
+                  File a Complaint <ArrowRight className="size-4" />
+                </Button>
+              </Link>
+              <Link href="/map">
+                <Button variant="outline" className="px-6 gap-2">
+                  <PlayCircle className="size-4" /> View Live Map
+                </Button>
+              </Link>
+            </div>
+            <div className="flex pt-2 items-center gap-8">
+              <div className="flex flex-col">
+                <span className="font-bold text-2xl">48h</span>
+                <span className="text-neutral-500 text-sm">SLA guarantee</span>
+              </div>
+              <Separator orientation="vertical" className="h-10" />
+              <div className="flex flex-col">
+                <span className="font-bold text-2xl">Live</span>
+                <span className="text-neutral-500 text-sm">Map tracking</span>
+              </div>
+              <Separator orientation="vertical" className="h-10" />
+              <div className="flex flex-col">
+                <span className="font-bold text-2xl">Auto</span>
+                <span className="text-neutral-500 text-sm">Escalation</span>
+              </div>
+            </div>
+          </div>
+          <div className="relative flex-1">
+            <div className="rounded-3xl border border-neutral-200 overflow-hidden bg-neutral-50 h-80 flex items-center justify-center">
+              <div className="text-center text-neutral-400">
+                <MessageSquareWarning className="size-16 mx-auto mb-3" />
+                <p className="font-medium">Live complaint map</p>
+                <p className="text-sm">Geo-tagged civic issues across your city</p>
+              </div>
+            </div>
+            <Card className="shadow-lg absolute -left-6 -bottom-6 p-4 w-56">
+              <CardContent className="flex p-0 items-center gap-3">
+                <div className="size-10 rounded-full bg-green-600 text-white flex justify-center items-center">
+                  <CheckCircle2 className="size-5" />
+                </div>
+                <div className="flex flex-col">
+                  <span className="font-semibold text-sm">Pothole resolved</span>
+                  <span className="text-neutral-500 text-xs">Ward 1 · 2 hours ago</span>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </section>
+
+        {/* Features */}
+        <section id="features" className="flex flex-col gap-8 mb-16">
+          <div className="text-center flex flex-col items-center gap-2">
+            <Badge variant="secondary" className="rounded-full px-3 py-1">Features</Badge>
+            <h2 className="font-bold text-3xl tracking-tight">Built for civic accountability</h2>
+            <p className="max-w-2xl text-neutral-500">Every feature designed to make government services more transparent and responsive.</p>
+          </div>
+          <div className="grid grid-cols-3 gap-6">
+            {[
+              { icon: FileText, title: 'Geo-tagged Filing', desc: 'Drop a pin on the map to file your complaint. Ward is auto-assigned based on your location.' },
+              { icon: Route, title: 'Smart Ward Routing', desc: 'PostGIS automatically assigns complaints to the right ward official based on GPS coordinates.' },
+              { icon: Activity, title: 'SLA Timer Engine', desc: 'Every complaint has a 48-hour deadline. Breach it and it auto-escalates to senior officials.' },
+              { icon: BarChart3, title: 'Resolution Heatmap', desc: 'See which areas have the most unresolved complaints with a live ward-level heatmap.' },
+              { icon: ShieldCheck, title: 'JWT Auth + RBAC', desc: 'Citizen, Official, and Admin roles with secure JWT authentication and refresh tokens.' },
+              { icon: Bell, title: 'Live WebSocket Updates', desc: 'Citizens get real-time notifications the moment an official updates their complaint status.' },
+            ].map(({ icon: Icon, title, desc }) => (
+              <Card key={title} className="p-6 gap-4">
+                <CardHeader className="p-0 gap-2">
+                  <div className="size-11 rounded-xl bg-neutral-100 text-neutral-900 flex justify-center items-center">
+                    <Icon className="size-5" />
+                  </div>
+                  <CardTitle className="text-lg">{title}</CardTitle>
+                </CardHeader>
+                <CardContent className="p-0">
+                  <p className="text-neutral-500 text-sm">{desc}</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </section>
+
+        {/* How it works */}
+        <section id="how" className="flex flex-col gap-8 mb-16">
+          <div className="text-center flex flex-col items-center gap-2">
+            <Badge variant="secondary" className="rounded-full px-3 py-1">How It Works</Badge>
+            <h2 className="font-bold text-3xl tracking-tight">Three steps to resolution</h2>
+          </div>
+          <div className="grid grid-cols-3 gap-6">
+            {[
+              { n: '1', title: 'File a complaint', desc: 'Drop a GPS pin, describe the issue, attach a photo. Ward is assigned automatically.' },
+              { n: '2', title: 'Official responds', desc: 'The ward official sees it in their queue sorted by SLA urgency and updates the status.' },
+              { n: '3', title: 'Get it resolved', desc: 'You get a live notification. If the SLA is breached, it escalates automatically.' },
+            ].map(({ n, title, desc }) => (
+              <div key={n} className="rounded-2xl border border-neutral-200 flex p-6 flex-col gap-3">
+                <div className="size-9 font-bold rounded-full bg-neutral-900 text-white text-sm flex justify-center items-center">{n}</div>
+                <h3 className="font-semibold text-lg">{title}</h3>
+                <p className="text-neutral-500 text-sm">{desc}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* CTA */}
+        <section>
+          <Card className="bg-neutral-900 text-white p-12">
+            <CardContent className="flex p-0 justify-between items-center gap-8">
+              <div className="flex flex-col gap-3">
+                <h2 className="font-bold text-3xl tracking-tight">Ready to fix your city?</h2>
+                <p className="max-w-xl text-white/80">Join GrievanceOS and hold your local government accountable with transparent, geo-tracked complaint resolution.</p>
+              </div>
+              <div className="flex items-center gap-3">
+                <Link href="/register">
+                  <Button variant="secondary" className="px-6 gap-2">
+                    File a Complaint <ArrowRight className="size-4" />
+                  </Button>
+                </Link>
+                <Link href="/map">
+                  <Button variant="outline" className="bg-transparent text-white border-white/30 px-6">
+                    View Live Map
+                  </Button>
+                </Link>
+              </div>
+            </CardContent>
+          </Card>
+        </section>
       </main>
+
+      <footer className="border-t border-neutral-200 px-12 py-8 mt-12">
+        <div className="flex justify-between items-center">
+          <div className="flex items-center gap-2">
+            <div className="size-8 rounded-lg bg-neutral-900 text-white flex justify-center items-center">
+              <MessageSquareWarning className="size-4" />
+            </div>
+            <span className="font-bold">GrievanceOS</span>
+          </div>
+          <p className="text-neutral-500 text-sm">Built with Spring Boot · PostgreSQL + PostGIS · Redis · Next.js</p>
+        </div>
+        <Separator className="my-6" />
+        <p className="text-center text-neutral-500 text-xs">© 2026 GrievanceOS. Civic tech for a better India.</p>
+      </footer>
     </div>
   );
 }
