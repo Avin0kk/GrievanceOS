@@ -12,6 +12,7 @@ import com.grievanceos.grievance_backend.repository.UserRepository;
 import com.grievanceos.grievance_backend.service.ComplaintService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -62,7 +63,7 @@ public class ComplaintController {
         return ResponseEntity.ok(complaintService.getComplaintById(id, user.getId()));
     }
 
-    @PatchMapping("/my-complaints/{id}/status")
+    @PatchMapping("/{id}/status")
     public ResponseEntity<ComplaintResponse> updateStatus(@PathVariable UUID id,
                                                           @RequestBody UpdateComplaintStatusRequest request) {
 
@@ -72,5 +73,12 @@ public class ComplaintController {
     @GetMapping("/map")
     public ResponseEntity<List<MapComplaintResponse>> mapComplaint() {
         return ResponseEntity.ok(complaintService.getMapComplaint());
+    }
+
+    @GetMapping("/official/queue")
+    @PreAuthorize("hasRole('OFFICIAL')")
+    public ResponseEntity<List<ComplaintResponse>> getOfficialQueue() {
+        User official = getCurrentUser();
+        return ResponseEntity.ok(complaintService.getOfficialQueue(official.getId(), official.getWardId()));
     }
 }

@@ -20,6 +20,8 @@ public interface ComplaintRepository extends JpaRepository<Complaint, UUID> {
 
     List<Complaint> findByStatus(ComplaintStatus status);
 
+    List<Complaint> findByWardId(UUID wardId);
+
     // All open complaints within X metres of a point — powers the map view
     @Query(value = """
         SELECT * FROM complaints

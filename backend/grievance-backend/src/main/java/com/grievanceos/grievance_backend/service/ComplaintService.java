@@ -11,6 +11,7 @@ import com.grievanceos.grievance_backend.model.StatusHistory;
 import com.grievanceos.grievance_backend.model.User;
 import com.grievanceos.grievance_backend.model.Ward;
 import com.grievanceos.grievance_backend.repository.ComplaintRepository;
+import com.grievanceos.grievance_backend.repository.StatusHistoryRepository;
 import com.grievanceos.grievance_backend.repository.WardRepository;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,7 @@ import org.locationtech.jts.geom.PrecisionModel;
 
 import java.time.Duration;
 import java.time.ZonedDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -33,6 +35,7 @@ public class ComplaintService {
 
     private final ComplaintRepository complaintRepository;
     private final WardRepository wardRepository;
+    private final StatusHistoryRepository statusHistoryRepository;
     private final RedisTemplate<String, String> redisTemplate;
 
     public ComplaintResponse createComplaint(CreateComplaintRequest request, UUID citizenId) {
@@ -135,13 +138,16 @@ public class ComplaintService {
 
         Complaint savedComplaint = complaintRepository.save(complaint);
 
-        StatusHistory history = StatusHistory.builder()
-                .complaintId(complaint.getId())
-                .changedBy(request.getChangedBy())
-                .fromStatus(oldStatus)
-                .toStatus(request.getStatus())
-                .note(request.getNote())
-                .build();
+        if(request.getChangedBy() != null) {
+            StatusHistory history = StatusHistory.builder()
+                    .complaintId(complaint.getId())
+                    .changedBy(request.getChangedBy())
+                    .fromStatus(oldStatus)
+                    .toStatus(request.getStatus())
+                    .note(request.getNote())
+                    .build();
+            statusHistoryRepository.save(history);
+        }
 
         return ComplaintResponse.builder()
                 .id(savedComplaint.getId())
@@ -164,6 +170,37 @@ public class ComplaintService {
                         .title(c.getTitle())
                         .category(c.getCategory())
                         .status(c.getStatus())
+                        .latitude(c.getLocation() != null ? c.getLocation().getY() : null)
+                        .longitude(c.getLocation() != null ? c.getLocation().getX() : null)
+                        .build())
+                .toList();
+    }
+
+    public List<ComplaintResponse> getOfficialQueue(UUID officialId, UUID wardId) {
+        List<Complaint> complaints;
+
+        if(wardId!=null) {
+            complaints = complaintRepository.findByWardId(wardId);
+        }
+        else {
+            complaints = complaintRepository.findByAssignedTo(officialId);
+        }
+
+        complaints.sort(Comparator.comparing(
+                Complaint::getSlaDeadline,
+                Comparator.nullsLast(Comparator.naturalOrder())
+        ));
+
+        return complaints.stream()
+                .map(c-> ComplaintResponse.builder()
+                        .id(c.getId())
+                        .title(c.getTitle())
+                        .status(c.getStatus())
+                        .priority(c.getPriority())
+                        .wardId(c.getWardId())
+                        .slaDeadline(c.getSlaDeadline())
+                        .createdAt(c.getCreatedAt())
+                        //.addressText(c.getAddressText())
                         .latitude(c.getLocation() != null ? c.getLocation().getY() : null)
                         .longitude(c.getLocation() != null ? c.getLocation().getX() : null)
                         .build())

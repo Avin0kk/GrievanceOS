@@ -24,6 +24,8 @@ public class ComplaintResponse {
 
     private Double latitude;
     private Double longitude;
+    private ZonedDateTime slaDeadline;
+    //private Addre
 
 
 }
