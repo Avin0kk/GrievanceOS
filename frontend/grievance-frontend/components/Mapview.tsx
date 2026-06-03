@@ -62,7 +62,7 @@ export default function MapView() {
           { color: 'red', label: 'Open' },
           { color: 'orange', label: 'In Progress' },
           { color: 'violet', label: 'Escalated' },
-          { color: 'green', label: 'Resolved' },
+          { color: 'green', label: 'Resolved (last 24h)' },
         ].map(({ color, label }) => (
           <div key={label} className="flex items-center gap-2">
             <div style={{ width: 12, height: 12, borderRadius: '50%', background: color, border: '2px solid white', boxShadow: '0 1px 3px rgba(0,0,0,0.3)' }} />
