@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -56,4 +58,7 @@ public interface ComplaintRepository extends JpaRepository<Complaint, UUID> {
         GROUP BY ward_id
         """, nativeQuery = true)
     List<Object[]> getComplaintCountByWard();
+
+    @Query("SELECT c FROM Complaint c WHERE c.status = 'RESOLVED' AND c.resolvedAt >= :since")
+    List<Complaint> findRecentlyResolved(@Param("since") ZonedDateTime since);
 }

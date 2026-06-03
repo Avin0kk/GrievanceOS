@@ -159,8 +159,14 @@ public class ComplaintService {
     }
 
     public List<MapComplaintResponse> getMapComplaint() {
-        return complaintRepository.findByStatus(ComplaintStatus.OPEN)
-                .stream()
+
+        List<Complaint> open = complaintRepository.findByStatus(ComplaintStatus.OPEN);
+        List<Complaint> resolved = complaintRepository.findRecentlyResolved(ZonedDateTime.now().minusHours(24));
+
+        List<Complaint> all = new java.util.ArrayList<>();
+        all.addAll(open);
+        all.addAll(resolved);
+        return all.stream()
                 .filter(c -> c.getLocation() != null)
                 .map(c -> MapComplaintResponse.builder()
                         .id(c.getId())
@@ -169,6 +175,8 @@ public class ComplaintService {
                         .status(c.getStatus())
                         .latitude(c.getLocation().getY())
                         .longitude(c.getLocation().getX())
+                        .addressText(c.getAddressText())
+                        .priority(c.getPriority())
                         .build())
                 .toList();
     }
