@@ -1,5 +1,6 @@
 package com.grievanceos.grievance_backend.config;
 
+import com.grievanceos.grievance_backend.listener.SlaExpiryListener;
 import org.springframework.context.annotation.*;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -21,10 +22,11 @@ public class RedisConfig {
 
     @Bean
     public RedisMessageListenerContainer listenerContainer(
-            RedisConnectionFactory factory) {
+            RedisConnectionFactory factory, SlaExpiryListener slaExpiryListener) {
         RedisMessageListenerContainer container =
                 new RedisMessageListenerContainer();
         container.setConnectionFactory(factory);
+        container.addMessageListener(slaExpiryListener, new PatternTopic("__keyevent@0__:expired"));
         return container;
     }
 }
