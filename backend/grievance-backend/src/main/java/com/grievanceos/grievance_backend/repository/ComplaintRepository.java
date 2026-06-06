@@ -26,6 +26,8 @@ public interface ComplaintRepository extends JpaRepository<Complaint, UUID> {
 
     List<Complaint> findByWardId(UUID wardId);
 
+    long countByWardId(UUID wardId);
+
     @Query(value = "SELECT * FROM wards w WHERE ST_Covers(w.boundary, ST_SetSRID(ST_Point(:lng, :lat), 4326)::geography) = true LIMIT 1", nativeQuery = true)
     Optional<Ward> findWardContainingPoint(@Param("lat") Double latitude, @Param("lng") Double longitude);
 

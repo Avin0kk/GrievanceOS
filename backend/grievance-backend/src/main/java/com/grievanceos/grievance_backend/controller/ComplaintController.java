@@ -11,6 +11,7 @@ import com.grievanceos.grievance_backend.model.Ward;
 import com.grievanceos.grievance_backend.repository.ComplaintRepository;
 import com.grievanceos.grievance_backend.repository.UserRepository;
 import com.grievanceos.grievance_backend.service.ComplaintService;
+import com.grievanceos.grievance_backend.service.EmailService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -30,6 +31,7 @@ public class ComplaintController {
 
     private final ComplaintService complaintService;
     private final UserRepository userRepository;
+    private final EmailService emailService;
 
     private User getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -95,4 +97,12 @@ public class ComplaintController {
     public ResponseEntity<Map<String, Object>> getStats() {
         return ResponseEntity.ok(complaintService.getAdminStats());
     }
+
+    @GetMapping("/admin/officials")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<Map<String, Object>>> getAllOfficials() {
+        return ResponseEntity.ok(complaintService.getOfficialsList());
+    }
+
+
 }

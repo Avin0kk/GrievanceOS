@@ -5,6 +5,7 @@ import com.grievanceos.grievance_backend.dto.request.UpdateComplaintStatusReques
 import com.grievanceos.grievance_backend.dto.response.ComplaintResponse;
 import com.grievanceos.grievance_backend.dto.response.MapComplaintResponse;
 import com.grievanceos.grievance_backend.enums.ComplaintStatus;
+import com.grievanceos.grievance_backend.enums.Role;
 import com.grievanceos.grievance_backend.model.Complaint;
 import com.grievanceos.grievance_backend.model.StatusHistory;
 import com.grievanceos.grievance_backend.model.User;
@@ -24,10 +25,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.ZonedDateTime;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -38,6 +36,9 @@ public class ComplaintService {
     private final WardRepository wardRepository;
     private final StatusHistoryRepository statusHistoryRepository;
     private final RedisTemplate<String, String> redisTemplate;
+    private final NotificationService notificationService;
+
+    private final EmailService emailService;
 
     // single helper used everywhere
     private ComplaintResponse mapToResponse(Complaint c) {
@@ -103,6 +104,16 @@ public class ComplaintService {
 
         Complaint savedComplaint = complaintRepository.save(complaint);
 
+        User citizen = userRepository.findById(citizenId).orElse(null);
+        if(citizen != null) {
+            String wardName = ward != null ? ward.getName() : null;
+            String officialName = ward != null && ward.getEscalationUserId() != null ? userRepository.findById(ward.getEscalationUserId())
+                    .map(User::getFullName)
+                    .orElse(null)
+                    : null;
+            emailService.sendComplaintConfirmation(savedComplaint, citizen.getEmail(), wardName, officialName);
+        }
+
         long slaHours = ward != null ? ward.getSlaHours() : 48;
         redisTemplate.opsForValue().set(
                 "sla:" + savedComplaint.getId(),
@@ -144,6 +155,9 @@ public class ComplaintService {
         }
 
         Complaint savedComplaint = complaintRepository.save(complaint);
+
+        notificationService.sendComplaintUpdate(savedComplaint.getId().toString(),
+                "Complaint status changed from " + oldStatus + " to " + savedComplaint.getStatus());
 
         if (request.getChangedBy() != null) {
             StatusHistory history = StatusHistory.builder()
@@ -220,5 +234,31 @@ public class ComplaintService {
                 "escalated", escalated,
                 "resolved", resolved
         );
+    }
+
+    public List<Map<String, Object>> getOfficialsList() {
+        List<User> officials = userRepository.findByRole(Role.OFFICIAL);
+
+        return officials.stream().map(official -> {
+
+            long complaintCount =
+                    complaintRepository.countByWardId(official.getWardId());
+
+            Ward ward = official.getWardId() != null
+                    ? wardRepository.findById(official.getWardId()).orElse(null)
+                    : null;
+
+            Map<String, Object> map = new HashMap<>();
+
+            map.put("id", official.getId());
+            map.put("name", official.getFullName());
+            map.put("email", official.getEmail());
+            map.put("phone", official.getPhone());
+            map.put("ward", ward != null ? ward.getName() : "Unassigned");
+            map.put("complaints", complaintCount);
+
+            return map;
+
+        }).toList();
     }
 }
