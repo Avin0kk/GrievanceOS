@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # GrievanceOS 🏛️
 
 A full-stack civic complaint resolution platform for Indian municipalities.
@@ -36,29 +35,8 @@ cp src/main/resources/application.properties.example src/main/resources/applicat
 
 # Frontend
 cd grievance-frontend
-=======
-# GrievanceOS Frontend
-
-Next.js 16 + TypeScript frontend for the GrievanceOS civic complaint platform.
-
-## Setup
-
-```bash
->>>>>>> e7f7318 (final: for deployment)
 npm install
 npm run dev
 ```
 
-<<<<<<< HEAD
 Open `http://localhost:3000`
-=======
-Open http://localhost:3000
-
-## Pages
-- `/` — Landing page
-- `/login` — Sign in
-- `/register` — Create account  
-- `/dashboard` — My complaints
-- `/complaints/new` — File a complaint
-- `/map` — Live complaint map
->>>>>>> e7f7318 (final: for deployment)

@@ -23,7 +23,6 @@ export default function AdminPage() {
   const [complaints, setComplaints] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState<'overview' | 'complaints' | 'officials'>('overview');
-  const [officials, setOfficials] = useState<any[]>([]);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -35,12 +34,10 @@ export default function AdminPage() {
     Promise.all([
       api.get('/complaints/admin/stats'),
       api.get('/complaints/admin/all-complaints'),
-      api.get('/complaints/admin/officials')
     ])
-      .then(([statsRes, complaintsRes, officialsRes]) => {
+      .then(([statsRes, complaintsRes]) => {
         setStats(statsRes.data);
         setComplaints(complaintsRes.data);
-        setOfficials(officialsRes.data);
       })
       .catch(() => router.push('/login'))
       .finally(() => setLoading(false));
@@ -229,25 +226,33 @@ export default function AdminPage() {
 
             {/* OFFICIALS TAB */}
             {tab === 'officials' && (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {officials.map((official: any) => (
-                <Card key={official.id}>
-                <CardContent className="pt-6">
-                <h3 className="font-semibold text-sm">{official.name}</h3>
-                <p className="text-xs text-neutral-500 mt-1">{official.email}</p>
-                <p className="text-xs text-neutral-600 mt-1">📞 {official.phone}</p>
-                <p className="text-xs text-neutral-600 mt-2">{official.ward}</p>
-                <div className="mt-3 pt-3 border-t border-neutral-200">
-                <p className="text-xs">
-                    <span className="font-medium">{official.complaints}</span>
-                    <span className="text-neutral-500"> complaints assigned</span>
-                </p>
-            </div>
-        </CardContent>
-      </Card>
-    ))}
-  </div>
-)}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {[
+                  { name: 'Rajesh Kumar', email: 'official.central@grievanceos.in', ward: 'Ward 1 - Central Delhi', complaints: 2 },
+                  { name: 'Priya Sharma', email: 'official.north@grievanceos.in', ward: 'Ward 2 - North Delhi', complaints: 1 },
+                  { name: 'Amit Singh', email: 'official.south@grievanceos.in', ward: 'Ward 3 - South Delhi', complaints: 4 },
+                  { name: 'Neha Gupta', email: 'official.east@grievanceos.in', ward: 'Ward 4 - East Delhi', complaints: 0 },
+                  { name: 'Vikram Yadav', email: 'official.west@grievanceos.in', ward: 'Ward 5 - West Delhi', complaints: 1 },
+                  { name: 'Sunita Verma', email: 'official.gurgaon@grievanceos.in', ward: 'Ward 6 - Gurgaon', complaints: 2 },
+                  { name: 'Rohit Mehta', email: 'official.noida@grievanceos.in', ward: 'Ward 7 - Noida', complaints: 0 },
+                  { name: 'Kavita Joshi', email: 'official.faridabad@grievanceos.in', ward: 'Ward 8 - Faridabad', complaints: 0 },
+                ].map((official) => (
+                  <Card key={official.email}>
+                    <CardContent className="pt-6">
+                      <h3 className="font-semibold text-sm">{official.name}</h3>
+                      <p className="text-xs text-muted-foreground mt-1">{official.email}</p>
+                      <p className="text-xs text-muted-foreground mt-2">{official.ward}</p>
+                      <div className="mt-3 pt-3 border-t border-border">
+                        <p className="text-xs">
+                          <span className="font-medium">{official.complaints}</span>
+                          <span className="text-muted-foreground"> complaints assigned</span>
+                        </p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            )}
           </>
         )}
       </main>
