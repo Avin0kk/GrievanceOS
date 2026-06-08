@@ -24,20 +24,24 @@ export default function OfficialPage() {
   const [selectedStatuses, setSelectedStatuses] = useState<Record<string, string>>({});
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (!token) { router.push('/login'); return; }
+  navigator.geolocation.getCurrentPosition(
+    async (position) => {
+      await api.post(
+        `/complaints/officials/update-location?latitude=${position.coords.latitude}&longitude=${position.coords.longitude}`
+      );
 
-    api.get('/complaints/official/queue')
-      .then(res => {
-        setComplaints(res.data);
-        // pre-fill the dropdown with each complaint's current status
-        const initial: Record<string, string> = {};
-        res.data.forEach((c: any) => { initial[c.id] = c.status; });
-        setSelectedStatuses(initial);
-      })
-      .catch(() => router.push('/login'))
-      .finally(() => setLoading(false));
-  }, []);
+      console.log('current location {} {}', position.coords.latitude, position.coords.longitude);
+
+      const res = await api.get("/complaints/official/queue");
+
+      setComplaints(res.data);
+      setLoading(false);
+    },
+    (err) => {
+      console.log("LOCATION ERROR", err);
+    }
+  );
+}, []);
 
   const updateStatus = async (id: string) => {
     const newStatus = selectedStatuses[id];
