@@ -104,5 +104,9 @@ public class ComplaintController {
         return ResponseEntity.ok(complaintService.getOfficialsList());
     }
 
+    @GetMapping("/map/recent-resolved")
+    public ResponseEntity<List<ComplaintResponse>> getRecentResolved() {
+        return ResponseEntity.ok(complaintService.getRecentResolved());
+    }
 
 }

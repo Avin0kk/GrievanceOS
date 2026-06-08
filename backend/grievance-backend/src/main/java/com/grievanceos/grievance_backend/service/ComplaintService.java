@@ -261,4 +261,12 @@ public class ComplaintService {
 
         }).toList();
     }
+
+    public List<ComplaintResponse> getRecentResolved() {
+        return complaintRepository.findRecentlyResolved(ZonedDateTime.now().minusHours(24))
+                .stream()
+                .limit(3)
+                .map(this::mapToResponse)
+                .toList();
+    }
 }

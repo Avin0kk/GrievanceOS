@@ -8,10 +8,20 @@ import { Separator } from '@/components/ui/separator';
 import ThemeToggle from '@/components/ThemeToggle';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
+import { useEffect, useState } from 'react';
+import api from '@/lib/axios';
 
- const MapView = dynamic(() => import('@/components/Mapview'), { ssr: false });
+const MapView = dynamic(() => import('@/components/Mapview'), { ssr: false });
 
 export default function Home() {
+  const [recentResolved, setRecentResolved] = useState<any[]>([]);
+
+    useEffect(() => {
+      api.get('complaints/map/recent-resolved')
+      .then(res => setRecentResolved(res.data))
+      .catch(err => console.error('Error fetching resolved:', err));
+    }, []);
+    
   return (
     <div className="bg-background text-foreground min-h-screen">
       {/* Navbar */}
@@ -83,6 +93,26 @@ export default function Home() {
               </div>
             </div>
           </div>
+
+          <div className="flex flex-col gap-3 flex-1 items-center">
+            <h3 className="font-semibold text-lg text-center">Just Resolved</h3>
+            <div className="space-y-2 w-full">
+             {recentResolved.slice(0, 3).map((complaint: any) => (
+             <Card key={complaint.id} className="shadow-sm">
+              <CardContent className="flex p-3 items-center gap-2">
+               <div className="size-8 rounded-full bg-green-600 text-white flex justify-center items-center flex-shrink-0">
+              <CheckCircle2 className="size-4" />
+               </div>
+              <div className="flex flex-col min-w-0">
+               <span className="font-semibold text-xs truncate">{complaint.title}</span>
+               <span className="text-muted-foreground text-xs">{complaint.wardName}</span>
+              </div>
+              </CardContent>
+             </Card>
+           ))}
+    </div>
+       </div>
+
           <div className="flex flex-col gap-3 items-center">
             <div className="rounded-3xl border border-border overflow-hidden bg-muted/70 h-96 w-96">
               <MapView />
