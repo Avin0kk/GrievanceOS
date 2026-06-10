@@ -1,4 +1,4 @@
-# GrievanceOS 🏛️
+# NagarSeva 🏛️
 
 A full-stack civic complaint resolution platform for Indian municipalities.
 Citizens file geo-tagged complaints, officials respond, and SLA timers ensure accountability.
@@ -7,8 +7,8 @@ Citizens file geo-tagged complaints, officials respond, and SLA timers ensure ac
 
 | Part | Stack | Folder |
 |------|-------|--------|
-| Backend | Spring Boot · PostgreSQL + PostGIS · Redis | `/grievance-backend` |
-| Frontend | Next.js · TypeScript · Tailwind · Leaflet | `/grievance-frontend` |
+| Backend | Spring Boot · PostgreSQL + PostGIS · Redis | `/NagarSeva-backend` |
+| Frontend | Next.js · TypeScript · Tailwind · Leaflet | `/NagarSeva-frontend` |
 
 ## ✨ Key Features
 
@@ -29,12 +29,12 @@ Citizens file geo-tagged complaints, officials respond, and SLA timers ensure ac
 
 ```bash
 # Backend
-cd grievance-backend
+cd NagarSeva-backend
 cp src/main/resources/application.properties.example src/main/resources/application.properties
 ./mvnw spring-boot:run
 
 # Frontend
-cd grievance-frontend
+cd NagarSeva-frontend
 npm install
 npm run dev
 ```
